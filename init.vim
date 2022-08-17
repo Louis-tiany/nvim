@@ -356,7 +356,7 @@ set updatetime=300
 
 let g:coc_global_extensions = ['coc-tsserver','coc-html','coc-css', 'coc-json',
             \ 'coc-java','coc-python','coc-flutter', 'coc-cmake', 'coc-explorer',
-            \ 'coc-emmet','coc-snippets','coc-xml','coc-yaml',
+            \ 'coc-snippets','coc-xml','coc-yaml',
             \ 'coc-markdownlint','coc-highlight','coc-clangd']
 
 
@@ -419,12 +419,19 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 "ultisnips
 "" Trigger configuration. Do not use <tab> if you use ycm
